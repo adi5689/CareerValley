@@ -1,32 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 const ContactUs = () => {
-  const [progress90, setProgress90] = useState(0);
-  const [progress80, setProgress80] = useState(0);
+ const [progress90, setProgress90] = useState(0);
+ const [progress80, setProgress80] = useState(0);
+ const ref = useRef(null);
 
-  useEffect(() => {
-    const interval90 = setInterval(() => {
-      setProgress90((prevProgress) => {
-        if (prevProgress === 90) clearInterval(interval90);
-        return prevProgress < 90 ? prevProgress + 1 : 90;
-      });
-    }, 10);
+ useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const interval90 = setInterval(() => {
+            setProgress90((prevProgress) => {
+              if (prevProgress === 90) clearInterval(interval90);
+              return prevProgress < 90 ? prevProgress + 1 : 90;
+            });
+          }, 10);
 
-    const interval80 = setInterval(() => {
-      setProgress80((prevProgress) => {
-        if (prevProgress === 80) clearInterval(interval80);
-        return prevProgress < 80 ? prevProgress + 1 : 80;
-      });
-    }, 10);
+          const interval80 = setInterval(() => {
+            setProgress80((prevProgress) => {
+              if (prevProgress === 80) clearInterval(interval80);
+              return prevProgress < 80 ? prevProgress + 1 : 80;
+            });
+          }, 30);
+
+          observer.disconnect(); // Stop observing once the component is in view
+        }
+      },
+      { threshold: 0.1 } // Adjust the threshold as needed
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
 
     return () => {
-      clearInterval(interval90);
-      clearInterval(interval80);
+      observer.disconnect();
     };
-  }, []);
+ }, []);
 
-  return (
-    <div className="flex flex-wrap font-anta justify-between items-center p-24 bg-gray-100">
+ return (
+    <div ref={ref} className="flex flex-wrap font-anta justify-between items-center p-24 bg-gray-100">
       <div className="w-full md:w-1/2">
         <h2 className="text-3xl font-bold mb-4 text-[#235950]">GET started</h2>
         <p className="mb-4 text-gray-700">
@@ -93,7 +106,7 @@ const ContactUs = () => {
         </form>
       </div>
     </div>
-  );
+ );
 };
 
 export default ContactUs;
