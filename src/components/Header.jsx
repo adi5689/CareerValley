@@ -57,7 +57,7 @@ const Header = () => {
       </div>
       {isMenuOpen && (
         <div className="fixed top-[-75px] right-0 w-[30vw] h-full bg-transparent bg-opacity-90 flex flex-col justify-center items-center transition-opacity duration-300 ease-in-out">
-          <div className="bg-[#8caeac]/60 p-6 rounded shadow-lg w-full max-w-md mx-auto">
+          <div className="bg-[#8caeac]/75 p-6 rounded shadow-lg w-full max-w-md mx-auto">
             
             <nav className="flex flex-col space-y-4">
               {/* Menu Items */}
